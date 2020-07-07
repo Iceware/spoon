@@ -74,7 +74,8 @@ public class JDTBatchCompiler extends org.eclipse.jdt.internal.compiler.batch.Ma
 		Map<String, char[]> pathToModName = new HashMap<>();
 
 		for (int round = 0; round < 2; round++) {
-			for (CompilationUnit compilationUnit : this.compilationUnits) {
+			for (int i = 0; i < this.compilationUnits.length; i++) {
+				CompilationUnit compilationUnit = this.compilationUnits[i];
 				char[] charName = compilationUnit.getFileName();
 				boolean isModuleInfo = CharOperation.endsWith(charName, JDTConstants.MODULE_INFO_FILE_NAME);
 				if (isModuleInfo == (round == 0)) { // 1st round: modules, 2nd round others (to ensure populating pathToModCU well in time)
@@ -92,7 +93,8 @@ public class JDTBatchCompiler extends org.eclipse.jdt.internal.compiler.batch.Ma
 								lastSlash += 1;
 							}
 							//TODO the module name parsed by JDK compiler is in `this.modNames`
-							compilationUnit.module = CharOperation.subarray(modulePath, lastSlash, modulePath.length);
+//							compilationUnit.module = CharOperation.subarray(modulePath, lastSlash, modulePath.length);
+							compilationUnit.module = this.modNames[i].toCharArray();
 							pathToModName.put(String.valueOf(modulePath), compilationUnit.module);
 						}
 					} else {
